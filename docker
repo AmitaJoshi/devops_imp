@@ -1,0 +1,23 @@
+
+Dockerfile:
+FROM node:16.14.2-slim(official images from docker hub)
+ENV NODE_ENV=production
+#we can set the working directory for container
+WORKDIR /usr/src/app
+#we copy build files to /usr/src/app
+COPY . /usr/src/app/
+RUN chown -R node /usr/src/app
+EXPOSE 8080
+USER root
+CMD npm start
+
+We build dockerfile using docker build command to create docker image
+
+docker build -t $app_name:$version .
+
+#then we login to aws ecr using docker login command. #aws - infra team creates the profile
+aws ecr get-login-password --region ap-southeast-1 --profile  $profile | docker login --username AWS --password-stdin $account_id.dkr.ecr.ap-southeast-1.amazonaws.com
+#then we tag our image with ECR name using docker tag command
+docker tag $app_name:$version $account_id.dkr.ecr.ap-southeast-1.amazonaws.com/$cluster_name:$version
+#Finally we push our image to ECR
+docker push $account_id.dkr.ecr.ap-southeast-1.amazonaws.com/$cluster_name:$version
