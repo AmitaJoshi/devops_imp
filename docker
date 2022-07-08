@@ -21,3 +21,22 @@ aws ecr get-login-password --region ap-southeast-1 --profile  $profile | docker 
 docker tag $app_name:$version $account_id.dkr.ecr.ap-southeast-1.amazonaws.com/$cluster_name:$version
 #Finally we push our image to ECR
 docker push $account_id.dkr.ecr.ap-southeast-1.amazonaws.com/$cluster_name:$version
+
+CI/CD =====================
+stage("Build Provisioning")
+It contains - checkoutSCM().
+                    buildCompileApp()
+stage("Static Code Analysis") 
+we are using sonar for java applications. command is 
+mvn sonar:sonar
+stage("Upload to Artifact Repo") 
+we upload artifacts in nexus
+stage("Deploy")
+
+mvn lifecycle:===================
+Validate, Compile, Test, Package, Verify, Install and Deploy 
+package will compile your code and also package it. 
+For example, if your pom says the project is a jar, 
+it will create a jar for you when you package it and put it somewhere in the target directory (by default).
+install will compile and package, but it will also put the package in your local repository. 
+This will make it so other projects can refer to it and grab it from your local repository.
